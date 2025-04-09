@@ -1,11 +1,30 @@
-import streamlit as st
-from pathlib import Path
-from io import BytesIO
+import os
+import subprocess
+
+# Function to install Poppler on Streamlit Cloud if not installed
+def install_poppler():
+    try:
+        # Check if poppler is installed by looking for 'pdfinfo'
+        subprocess.call(['pdfinfo', '--version'])
+    except FileNotFoundError:
+        # If 'pdfinfo' is not found, install poppler-utils
+        print("Poppler not found. Installing poppler-utils...")
+        subprocess.call(['apt-get', 'update'])
+        subprocess.call(['apt-get', 'install', '-y', 'poppler-utils'])
+    else:
+        print("Poppler is already installed.")
+
+install_poppler()  # Call the function to install Poppler
+
+# Continue with the rest of your app code
 from pdf2image import convert_from_bytes
 from pptx import Presentation
 from pptx.util import Inches
+import io
+import streamlit as st
+from pathlib import Path
+from io import BytesIO
 import fitz  # PyMuPDF
-import os
 
 IMAGE_DPI = 150
 
